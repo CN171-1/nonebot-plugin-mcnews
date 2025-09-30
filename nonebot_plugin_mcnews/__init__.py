@@ -17,7 +17,7 @@ from nonebot import on_command, get_bots, require, logger, get_plugin_config
 
 class MCNewsConfig(BaseModel):
     """Minecraft News 配置"""
-    debug: bool = False
+    mcnews_debug: bool = False
     mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
 
 config = get_plugin_config(MCNewsConfig)
