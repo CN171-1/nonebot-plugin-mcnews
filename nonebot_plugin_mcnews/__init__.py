@@ -6,7 +6,7 @@ __plugin_meta__ = PluginMetadata(
     description="Minecraft 官方新闻推送",
     usage="自动推送 Minecraft 官方新闻",
     type="application",
-    homepage="https://github.com/CN171-1/nonebot_plugin_mcnews",
+    homepage="https://github.com/CN171-1/nonebot-plugin-mcnews",
     supported_adapters={"~onebot.v11"},
 )
 
