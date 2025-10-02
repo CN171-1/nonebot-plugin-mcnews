@@ -10,7 +10,6 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters={"~onebot.v11"},
 )
 
-import os
 import httpx
 import json
 from pathlib import Path
