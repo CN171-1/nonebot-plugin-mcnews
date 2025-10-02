@@ -67,13 +67,18 @@ async def is_first_run(key: str) -> bool:
 
 async def get_json(url: str, timeout: int = 30) -> dict:
     """获取JSON数据"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
+    }
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        async with httpx.AsyncClient(timeout=timeout, headers=headers) as client:
             response = await client.get(url)
             response.raise_for_status()
             return response.json()
     except Exception as e:
+        import traceback
         logger.error(f"Error fetching JSON from {url}: {e}")
+        logger.error(traceback.format_exc())
         return {}
 
 async def broadcast_message(message: Message):
@@ -103,7 +108,7 @@ async def minecraft_news_schedule():
     try:
         data = await get_json(url)
         if not data:
-            logger.error("Failed to fetch Minecraft news JSON.")
+            logger.error("获取 Minecraft 官网新闻失败。")
             return
             
         alist = await get_stored_list("mcnews")
