@@ -133,7 +133,7 @@ async def minecraft_news_schedule():
                 if first_run:
                     alist.append(title)
                 else:
-                    message = Message(f"Minecraft 官网发布了新的文章：\n{title}\n{desc}\n{link}")
+                    message = Message(f"Minecraft 官网发布了新的文章：\n{title}\n  {desc}\n{link}")
                     await broadcast_message(message)
                     
                     logger.info(f"发现MC官网文章更新：{title}")
@@ -142,7 +142,7 @@ async def minecraft_news_schedule():
         # 如果是第一次运行，保存初始列表
         if first_run:
             await update_stored_list("mcnews", alist)
-            logger.info("首次运行，初始化文章列表完成。")
+            logger.info("首次运行，初始化官网文章列表完成。")
         elif alist:  # 只有在有更新时才保存
             await update_stored_list("mcnews", alist)
                 
@@ -152,3 +152,59 @@ async def minecraft_news_schedule():
         else:
             logger.error(f"Error in minecraft_news_schedule: {e}")
 
+@scheduler.scheduled_job("interval", seconds=300, id="feedback_news")
+async def feedback_news_schedule():
+    sections = [
+        {
+            "name": "beta",
+            "url": "https://minecraftfeedback.zendesk.com/api/v2/help_center/en-us/sections/360001185332/articles?per_page=5",
+        },
+        {
+            "name": "article", 
+            "url": "https://minecraftfeedback.zendesk.com/api/v2/help_center/en-us/sections/360001186971/articles?per_page=5",
+        },
+    ]
+    
+    for section in sections:
+        try:
+            alist = await get_stored_list("mcfeedbacknews")
+            
+            # 检查是否是第一次运行
+            first_run = await is_first_run("mcfeedbacknews")
+            
+            data = await get_json(section["url"])
+            if not data:
+                continue
+                
+            articles = data["articles"]
+            
+            for article in articles:
+                name = article["name"]
+                if not name:
+                    continue
+                    
+                if name not in alist:
+                    link = article["html_url"]
+                    
+                    # 如果是第一次运行，只记录文章标题但不发送消息
+                    if first_run:
+                        alist.append(name)
+                    else:
+                        message = f"Minecraft Feedback 发布了新的文章：\n{name}\n{link}"
+                        await broadcast_message(message)
+                        
+                        logger.info(f"发现MC Feedback文章更新： {name}")
+                        alist.append(name)
+            
+            # 如果是第一次运行，保存初始列表
+            if first_run:
+                await update_stored_list("mcfeedbacknews", alist)
+                logger.info("首次运行，初始化Feedback文章列表完成。")
+            elif alist:  # 只有在有更新时才保存
+                await update_stored_list("mcfeedbacknews", alist)
+                    
+        except Exception as e:
+            if config.mcnews_debug:
+                logger.exception(f"Error in feedback_news_schedule: {e}")
+            else:
+                logger.error(f"Error in feedback_news_schedule: {e}")
