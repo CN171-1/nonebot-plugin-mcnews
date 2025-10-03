@@ -63,7 +63,7 @@
 
 ## 鸣谢
 
-- [nonebot_plugin_apscheduler](https://github.com/nonebot/plugin-apscheduler) - NoneBot 的定时任务插件
+- [nonebot-plugin-apscheduler](https://github.com/nonebot/plugin-apscheduler) - NoneBot 的定时任务插件
 - [nonebot-plugin-localstore](https://github.com/nonebot/plugin-localstore) - NoneBot 的本地数据存储插件
 
 ## 反馈
