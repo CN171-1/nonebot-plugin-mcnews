@@ -12,7 +12,6 @@ __plugin_meta__ = PluginMetadata(
 
 import httpx
 import json
-from pathlib import Path
 from nonebot.adapters.onebot.v11 import Message
 from nonebot import get_bots, require, logger, get_plugin_config
 
@@ -24,10 +23,14 @@ class MCNewsConfig(BaseModel):
 config = get_plugin_config(MCNewsConfig)
 mcnews_group_id = config.mcnews_group_id
 
+require("nonebot_plugin_localstore")
+
+import nonebot_plugin_localstore as store
+
 # 数据存储管理
 class StorageManager:
     def __init__(self):
-        self.data_dir = Path("data/minecraft_news")
+        self.data_dir = store.get_plugin_data_dir()
         self.data_dir.mkdir(parents=True, exist_ok=True)
     
     async def get_stored_list(self, key: str) -> list[str]:
@@ -157,19 +160,22 @@ async def feedback_news_schedule():
         {
             "name": "beta",
             "url": "https://minecraftfeedback.zendesk.com/api/v2/help_center/en-us/sections/360001185332/articles?per_page=5",
+            "key": "mcfeedbacknews_beta"  # 为每个API使用不同的存储键名
         },
         {
             "name": "article", 
             "url": "https://minecraftfeedback.zendesk.com/api/v2/help_center/en-us/sections/360001186971/articles?per_page=5",
+            "key": "mcfeedbacknews_article"  # 为每个API使用不同的存储键名
         },
     ]
     
     for section in sections:
         try:
-            alist = await get_stored_list("mcfeedbacknews")
+            key = section["key"]
+            alist = await get_stored_list(key)
             
             # 检查是否是第一次运行
-            first_run = await is_first_run("mcfeedbacknews")
+            first_run = await is_first_run(key)
             
             data = await get_json(section["url"])
             if not data:
@@ -197,13 +203,13 @@ async def feedback_news_schedule():
             
             # 如果是第一次运行，保存初始列表
             if first_run:
-                await update_stored_list("mcfeedbacknews", alist)
-                logger.info("首次运行，初始化Feedback文章列表完成。")
+                await update_stored_list(key, alist)
+                logger.info(f"首次运行，初始化Feedback_{section['name']}文章列表完成。")
             elif alist:  # 只有在有更新时才保存
-                await update_stored_list("mcfeedbacknews", alist)
+                await update_stored_list(key, alist)
                     
         except Exception as e:
             if config.mcnews_debug:
-                logger.exception(f"Error in feedback_news_schedule: {e}")
+                logger.exception(f"Error in feedback_news_schedule_{section['name']}: {e}")
             else:
-                logger.error(f"Error in feedback_news_schedule: {e}")
+                logger.error(f"Error in feedback_news_schedule_{section['name']}: {e}")
