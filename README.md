@@ -58,11 +58,13 @@
 | 配置项                      | 类型   | 默认值   | 说明                            |
 | ------------------------ | ---- | ----- | ----------------------------- |
 | `mcnews_debug`           | bool | False | 开启调试模式，输出异常堆栈                |
+| `mcnews_proixes`         | str | None    | 代理设置 |
 | `mcnews_group_id`           | int / str  | []    | 指定自动推送消息的群组 ID                    |
 
 ## 鸣谢
 
 - [nonebot_plugin_apscheduler](https://github.com/nonebot/plugin-apscheduler) - NoneBot 的定时任务插件
+- [nonebot-plugin-localstore](https://github.com/nonebot/plugin-localstore) - NoneBot 的本地数据存储插件
 
 ## 反馈
 
