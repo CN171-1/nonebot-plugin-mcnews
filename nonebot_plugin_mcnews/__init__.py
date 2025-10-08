@@ -1,6 +1,12 @@
 from nonebot.plugin import PluginMetadata
 from pydantic import BaseModel
 
+class MCNewsConfig(BaseModel):
+    """Minecraft News 配置"""
+    mcnews_debug: bool = False
+    mcnews_proxies: str = None  # 代理设置
+    mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
+
 __plugin_meta__ = PluginMetadata(
     name="MC新闻更新检测",
     description="Minecraft 官方新闻推送",
@@ -8,18 +14,13 @@ __plugin_meta__ = PluginMetadata(
     type="application",
     homepage="https://github.com/CN171-1/nonebot-plugin-mcnews",
     supported_adapters={"~onebot.v11"},
+    config=MCNewsConfig,
 )
 
 import httpx
 import json
 from nonebot.adapters.onebot.v11 import Message
 from nonebot import get_bots, require, logger, get_plugin_config
-
-class MCNewsConfig(BaseModel):
-    """Minecraft News 配置"""
-    mcnews_debug: bool = False
-    mcnews_proxies: str = None  # 代理设置
-    mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
 
 config = get_plugin_config(MCNewsConfig)
 proxies = config.mcnews_proxies
@@ -102,10 +103,12 @@ async def broadcast_message(message: Message):
         logger.success("已发现并成功推送MC官网文章更新信息")
     else:
         logger.warning("未配置MC官网文章更新推送群组，跳过推送")
+        
+require("nonebot_plugin_apscheduler")
 
-scheduler = require('nonebot_plugin_apscheduler').scheduler
+from nonebot_plugin_apscheduler import scheduler
 
-@scheduler.scheduled_job("interval", seconds=300, id="minecraft_news")
+@scheduler.scheduled_job("interval", minutes=5, id="minecraft_news", misfire_grace_time=10)
 async def minecraft_news_schedule():
     baseurl = "https://www.minecraft.net"
     url = "https://www.minecraft.net/content/minecraftnet/language-masters/en-us/jcr:content/root/container/image_grid_a_copy_64.articles.page-1.json"
@@ -157,7 +160,7 @@ async def minecraft_news_schedule():
         else:
             logger.error(f"Error in minecraft_news_schedule: {e}")
 
-@scheduler.scheduled_job("interval", seconds=300, id="feedback_news")
+@scheduler.scheduled_job("interval", minutes=5, id="feedback_news", misfire_grace_time=10)
 async def feedback_news_schedule():
     sections = [
         {
