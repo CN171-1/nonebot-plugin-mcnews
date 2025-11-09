@@ -23,7 +23,7 @@ from nonebot.adapters.onebot.v11 import Message
 from nonebot import get_bots, require, logger, get_plugin_config
 
 config = get_plugin_config(MCNewsConfig)
-proxies = config.mcnews_proxies
+proxy = config.mcnews_proxies
 mcnews_group_id = config.mcnews_group_id
 
 require("nonebot_plugin_localstore")
@@ -76,7 +76,7 @@ async def get_json(url: str, timeout: int = 30) -> dict:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
     }
     try:
-        async with httpx.AsyncClient(timeout=timeout, headers=headers, proxies=proxies) as client:
+        async with httpx.AsyncClient(timeout=timeout, headers=headers, proxy=proxy) as client:
             response = await client.get(url)
             response.raise_for_status()
             return response.json()
