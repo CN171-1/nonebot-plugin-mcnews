@@ -60,6 +60,10 @@
 | `mcnews_debug`           | bool | False | 开启调试模式，输出异常堆栈                |
 | `mcnews_proixes`         | str | None    | 代理设置 |
 | `mcnews_group_id`           | int / str  | []    | 指定自动推送消息的群组 ID                    |
+|`mcnews_translate`| bool | False | 是否启用标题翻译功能（使用百度翻译API） |
+|`mcnews_translate_appid`|str|None| 百度翻译appid |
+|`mcnews_translate_appkey`|str|None| 百度翻译appkey |
+|`mcnews_translate_needIntervene`|int|0|百度翻译是否使用术语库,0-不启用，1-启用|
 
 ## 鸣谢
 
