@@ -7,9 +7,9 @@ class MCNewsConfig(BaseModel):
     mcnews_proxies: str = None  # 代理设置
     mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
     mcnews_translate: bool = False  # 是否启用翻译
-    mcnews_translate_appid: str = None  # 百度翻译appid
+    mcnews_translate_appid: int | str = None  # 百度翻译appid
     mcnews_translate_appkey: str = None  # 百度翻译appkey
-    mcnews_translate_needIntervene: int = 0  # 百度翻译是否使用术语库，0-不启用，1-启用
+    mcnews_translate_needintervene: int = 0  # 百度翻译是否使用术语库，0-不启用，1-启用
 
 __plugin_meta__ = PluginMetadata(
     name="MC新闻更新检测",
@@ -103,15 +103,15 @@ async def baidu_translate_batch(texts: list[str]) -> list[str]:
     
     appid = config.mcnews_translate_appid
     appkey = config.mcnews_translate_appkey
-    needIntervene = config.mcnews_translate_needIntervene
+    needIntervene = config.mcnews_translate_needintervene
     
     # 用换行符拼接多个要翻译的文本
     query = "\n".join(texts)
     salt = random.randint(32768, 65536)
-    sign = make_md5(appid + query + str(salt) + appkey)
+    sign = make_md5(str(appid) + query + str(salt) + appkey)
 
     payload = {
-        "appid": appid,
+        "appid": str(appid),
         "q": query,
         "from": "en",
         "to": "zh",
