@@ -6,6 +6,10 @@ class MCNewsConfig(BaseModel):
     mcnews_debug: bool = False
     mcnews_proxies: str = None  # 代理设置
     mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
+    mcnews_translate: bool = False  # 是否启用翻译
+    mcnews_translate_appid: str = ""  # 百度翻译appid
+    mcnews_translate_appkey: str = ""  # 百度翻译appkey
+    mcnews_translate_needIntervene: int = 0  # 百度翻译是否使用术语库，0-不启用，1-启用
 
 __plugin_meta__ = PluginMetadata(
     name="MC新闻更新检测",
@@ -19,6 +23,7 @@ __plugin_meta__ = PluginMetadata(
 
 import httpx
 import json
+import random
 from nonebot.adapters.onebot.v11 import Message
 from nonebot import get_bots, require, logger, get_plugin_config
 
@@ -87,6 +92,50 @@ async def get_json(url: str, timeout: int = 30) -> dict:
             logger.error(traceback.format_exc())
         return {}
 
+def make_md5(s: str, encoding='utf-8') -> str:
+    from hashlib import md5
+    return md5(s.encode(encoding)).hexdigest()
+
+async def baidu_translate_batch(texts: list[str]) -> list[str]:
+    """
+    批量翻译多个文本（title 和 desc），返回翻译后的列表，顺序与输入一致。
+    """  
+    
+    appid = config.mcnews_translate_appid
+    appkey = config.mcnews_translate_appkey
+    needIntervene = config.mcnews_translate_needIntervene
+    
+    # 用换行符拼接多个要翻译的文本
+    query = "\n".join(texts)
+    salt = random.randint(32768, 65536)
+    sign = make_md5(appid + query + str(salt) + appkey)
+
+    payload = {
+        "appid": appid,
+        "q": query,
+        "from": "en",
+        "to": "zh",
+        "salt": salt,
+        "sign": sign,
+        "needIntervene": needIntervene
+    }
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post("http://api.fanyi.baidu.com/api/trans/vip/translate",
+                                         params=payload, headers=headers)
+            data = response.json()
+            if "trans_result" in data:
+                # trans_result 是 list，每个元素对应一段翻译
+                return [item["dst"] for item in data["trans_result"]]
+            else:
+                logger.error(f"百度翻译 API 返回异常: {data}")
+                return "调用百度翻译失败,请开发者前往后台查看具体错误信息。"
+    except Exception as e:
+        logger.error(f"调用百度翻译失败: {e}")
+        return "调用百度翻译失败,请开发者前往后台查看具体错误信息。"
+
 async def broadcast_message(message: Message):
     """广播消息到设置的群组ID中"""
     bots = get_bots()
@@ -141,7 +190,21 @@ async def minecraft_news_schedule():
                 if first_run:
                     alist.append(title)
                 else:
-                    message = Message(f"Minecraft 官网发布了新的文章：\n{title}\n  {desc}\n{link}")
+                    if config.mcnews_translate:
+                        tr_title, tr_desc = await baidu_translate_batch([title, desc])
+                        message = Message(
+                            f"Minecraft 官网发布了新的文章：\n"
+                            f"{title}\n{tr_title}\n\n"
+                            f"{desc}\n{tr_desc}\n"
+                            f"{link}"
+                        )
+                    else:
+                        message = Message(
+                            f"Minecraft 官网发布了新的文章：\n"
+                            f"{title}\n"
+                            f"{desc}\n\n"
+                            f"{link}"
+                        )
                     await broadcast_message(message)
                     
                     logger.info(f"发现MC官网文章更新：{title}")
