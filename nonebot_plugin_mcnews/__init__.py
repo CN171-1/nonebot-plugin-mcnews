@@ -7,8 +7,8 @@ class MCNewsConfig(BaseModel):
     mcnews_proxies: str = None  # 代理设置
     mcnews_group_id: list[int | str] = []  # 要推送的QQ群列表
     mcnews_translate: bool = False  # 是否启用翻译
-    mcnews_translate_appid: str = ""  # 百度翻译appid
-    mcnews_translate_appkey: str = ""  # 百度翻译appkey
+    mcnews_translate_appid: str = None  # 百度翻译appid
+    mcnews_translate_appkey: str = None  # 百度翻译appkey
     mcnews_translate_needIntervene: int = 0  # 百度翻译是否使用术语库，0-不启用，1-启用
 
 __plugin_meta__ = PluginMetadata(
