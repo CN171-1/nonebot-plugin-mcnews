@@ -1,0 +1,78 @@
+A Minecraft Java Pre-Release|||一个 Minecraft Java 预发布版本
+A Minecraft Java Release Candidate|||一个 Minecraft Java 发布候选版本
+A Minecraft Java Snapshot|||一个 Minecraft Java 快照版本
+A small change for clarity|||一个为了提高清晰度的小改动
+Acacia|||金合欢
+Armored Paws|||犰甲狼兵
+Around the Block|||群系漫游
+Bats and Pots|||蝙蝠与陶罐
+Bedrock Edition|||基岩版
+Better Together Update|||独乐不如众乐更新
+Block of the Month|||本月方块
+Block of the Week|||本周方块
+Bountiful Update|||缤纷更新
+Bundles of Bravery|||勇气之袋
+Buzzy Bees|||嗡嗡蜂群
+Camel Husk|||骆驼尸壳
+Caves & Cliffs: Part I|||洞穴与山崖（第一部分）
+Caves & Cliffs: Part II|||洞穴与山崖（第二部分）
+Changelog|||更新日志
+Chase the Skies|||追逐天空
+Combat Update|||战斗更新
+Dragon Egg|||龙蛋
+Elder Guardian|||远古守卫者
+Enderman|||末影人
+Endermite|||末影螨
+Evoker|||唤魔者
+Exploration Update|||探险更新
+Frostburn Update|||霜炙更新
+Ghast|||恶魂
+Horse Update|||马匹更新
+Java Edition|||Java 版
+Marketplace Content|||市场内容
+Minecraft Beta & Preview|||Minecraft Beta & Preview
+Mob Menagerie|||生物图鉴
+Mounts of Mayhem|||群骑纷争
+Nautilus|||鹦鹉螺
+Nether Update|||下界更新
+New on Java Realms|||Java Realms 新内容上线
+Parched|||焦骸
+Polished|||磨制
+Poppy|||虞美人
+Pretty Scary Update|||骇人更新
+Redstone Update|||红石更新
+Sapling|||树苗
+Seecret Friday Update|||秘密周五更新
+Shulker|||潜影贝
+Slab|||台阶
+Spring to Life|||春意盎然
+Taking Inventory|||背包盘点
+The Copper Age|||铜器时代
+The Garden Awakens|||苍园觉醒
+The Update that Changed the World|||改变世界的更新
+The Wild Update|||荒野更新
+Trails & Tales|||足迹与故事
+Tricky Trials|||棘巧试炼
+Tuff|||凝灰岩
+Update Aquatic|||水域更新
+Village & Pillage|||村庄与掠夺
+World of Color Update|||多彩世界更新
+Zombie Nautilus|||僵尸鹦鹉螺
+Blaze|||烈焰人
+Bogged|||沼骸
+Breeze|||旋风人
+Hoglin|||疣猪兽
+Husk|||尸壳
+Piglin Brute|||猪灵蛮兵
+Piglin|||猪灵
+Pillager|||掠夺者
+Ravager|||劫掠兽
+Silverfish|||蠹虫
+Slime|||史莱姆
+Sniffer|||嗅探兽
+Strider|||炽足兽
+Vex|||恼鬼
+Vindicator|||卫道士
+Warden|||监守者
+Wither|||凋零
+Zoglin|||僵尸疣猪兽
