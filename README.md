@@ -9,6 +9,7 @@
 - 定时从 [minecraft.net](https://www.minecraft.net) 拉取新闻文章
 - 定时从 [Minecraft Feedback](https://minecraftfeedback.zendesk.com/) 拉取最新文章
 - 在指定群组内发送更新通知消息
+- 可选：自动使用百度翻译 API 翻译新闻标题，并支持术语库干预
 
 ## 安装
 
@@ -63,7 +64,25 @@
 |`mcnews_translate`| bool | False | 是否启用标题翻译功能（使用百度翻译API） |
 |`mcnews_translate_appid`|str|None| 百度翻译appid |
 |`mcnews_translate_appkey`|str|None| 百度翻译appkey |
-|`mcnews_translate_needIntervene`|int|0|百度翻译是否使用术语库,0-不启用，1-启用|
+|`mcnews_translate_needintervene`|int|0|百度翻译是否使用术语库,0-不启用，1-启用|
+
+## 术语库使用说明
+
+本插件提供了一个 **可选的翻译术语库文件**，用于改善百度翻译在处理 Minecraft 官方术语时的准确度。
+
+###  如何使用术语库？
+
+你可以将插件附带的术语库文件直接上传至 **百度翻译开放平台**：
+
+> 登录百度翻译开放平台 → 我的术语库 → 导入术语
+
+导入后，即可在插件中开启术语库功能（`mcnews_translate_needintervene=1`），使翻译结果能优先匹配术语库中的条目。
+
+###  重要提醒
+
+* 本术语库并非官方完整标准译名，仅收录了部分 **容易被错误翻译、影响阅读** 的术语；
+* 术语库会随着最新标准译名的更新 **持续扩充与维护**；
+* 如果你发现遗漏或错误的术语，欢迎提交 issue 反馈。
 
 ## 鸣谢
 
