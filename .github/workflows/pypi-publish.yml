@@ -1,6 +1,11 @@
 name: Publish Python distributions to PyPI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "pyproject.toml"
 
 jobs:
   build-n-publish:
