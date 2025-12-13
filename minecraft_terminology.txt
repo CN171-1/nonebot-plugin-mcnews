@@ -76,3 +76,4 @@ Vindicator|||卫道士
 Warden|||监守者
 Wither|||凋零
 Zoglin|||僵尸疣猪兽
+Answer the call|||响应号召
